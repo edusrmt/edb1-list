@@ -1,3 +1,11 @@
+# VSCode Files ignore
+/.vscode
+
+# Mac OS's thumbs ignore
+*/.DS_Store
+.DS_Store
+
+# CMake Files ignore
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -7,3 +15,6 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+
+# Build files
+/bin
