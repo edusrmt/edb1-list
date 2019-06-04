@@ -1,6 +1,6 @@
 #include <iostream>  // cout, endl
 #include <cassert>   // assert()
-#include "list.h"
+#include "../include/list.hpp"
 
 template < typename T = int >
 sc::list<T> createVec( const sc::list<T> & _v )
@@ -21,7 +21,7 @@ int main( void )
         assert( seq.empty() == true );
         std::cout << ">>> Passed!\n\n";
     }
-
+    /*
     // Unit #2: constructor (size)
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": constructor(size).\n";
@@ -516,6 +516,6 @@ int main( void )
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    */
     return 0;
 }
