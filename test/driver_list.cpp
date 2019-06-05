@@ -47,7 +47,7 @@ int main( void )
 
         std::cout << ">>> Passed!\n\n";
     }
-    /*
+    
     // Unit #5: range constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": range constructor.\n";
@@ -62,14 +62,14 @@ int main( void )
             assert ( e == i++ );
 
         // Copy only part of the original range.
-        sc::list<int> vec3( std::next( seq.begin(), 1 ), std::next( seq.begin(), 3 ) );
-        auto it2 = std::next( seq.begin(), 1 );
+        sc::list<int> vec3(seq.begin() + 1, seq.begin() + 3 );
+        auto it2 = seq.begin() + 1;
         for ( auto it = vec3.begin() ; it != vec3.end() ; ++it, ++it2 )
             assert( *it == *it2 );
 
         std::cout << ">>> Passed!\n\n";
     }
-    
+    /*
     // Unit: copy constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": copy constructor.\n";

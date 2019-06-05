@@ -17,199 +17,130 @@ namespace sc {
 
             /// Basic constructor
             Node (const T &d = T(), Node *p = nullptr, Node *n = nullptr) : data{d}, prev{p}, next{n} { }
-        };
-        
+        };      
 
         public:
-        class const_iterator
-        {
-        public:
-            /// Default constructor that creates an nullptr.
-            const_iterator()
-            {
-                current = nullptr;
-            }
+        class const_iterator {
+            public:
+                /// Default constructor that creates an nullptr.
+                const_iterator () : current{nullptr} {}
 
-            /// Returns a value from the iterator pointer.
-            const T &operator*() const
-            {
-                return current->data;
-            }
+                /// Return a reference to the object located at the position pointed by the iterator.
+                const T &operator*() const { return *current; } // *it
 
-            /// Advances the iterator to the next location within the list and returns itself after that.
-            const_iterator &operator++() // ++it;
-            {
-                current = current->next;
-                return current;
-            }
-
-            /// Advances the iterator to the next location within the list and returns itself before that.
-            const_iterator operator++(int) // it++;
-            {
-                current = current->next;
-                const_iterator it(current->prev);
-                return it;
-            }
-            
-            /// Advances the iterator to the n-th location within the list and returns itself.
-            friend const_iterator operator+(const_iterator it, int n) // it++;
-            {
-                for(int i = 0; i < n; i) 
+                /// Advances the iterator to the next location within the list and returns itself after that.
+                const_iterator &operator++() // ++it;
                 {
-                    it->current = it->current->next;
+                    current = current->next;
+                    return current;
                 }
 
-                return it;
-            }
-            
-            friend const_iterator operator+(int n, const_iterator it) // it++;
-            {
-                for(int i = 0; i < n; i) 
+                /// Advances the iterator to the next location within the list and returns itself before that.
+                const_iterator operator++(int) // it++;
                 {
-                    it->current = it->current->next;
+                    const_iterator temp(current);
+                    current = current->next;                    
+                    return temp;
                 }
-                return it;
-            }
 
-            /// Backs the iterator to the previous location within the list and returns itself after that.
-            const_iterator &operator--() // --it;
-            {
-                current = current->prev;
-                const_iterator it(current->next);
-                return it;
-            }
-
-            /// Backs the iterator to the previous location within the list and returns itself before that.
-            const_iterator operator--(int) // it--;
-            {
-                const_iterator prev(current->prev);
-                return prev;
-            }
-
-            /// Backs the iterator to the n-th location within the list and returns itself after that.
-            friend const_iterator operator-(const_iterator it, int n) // it--;
-            {
-                for (int i = 0; i < n; i++) {
-                    it->current = it->current->prev;
+                /// Backs the iterator to the previous location within the list and returns itself after that.
+                const_iterator &operator--() // --it;
+                {
+                    current = current->prev;
+                    return const_iterator(current);
                 }
-                
-                return it; 
-            }
 
-            friend const_iterator operator-(int n, const_iterator it) // it--;
-            {
-                for (int i = 0; i < n; i++) {
-                    it->current = it->current->prev;
+                /// Backs the iterator to the previous location within the list and returns itself before that.
+                const_iterator operator--(int) // it--;
+                {
+                    const_iterator temp(current);
+                    current = current->prev;
+                    return temp;
                 }
-                
-                return it;
-            }
 
-            /// Returns true if both iterators refer to same location within the list, and false otherwise.
-            bool operator==(const const_iterator &rhs) const
-            {
-                return (current - rhs.current) == 0;
-            }
+                /// Returns true if both iterators refer to same location within the list, and false otherwise.
+                bool operator==(const const_iterator &rhs) const // it1 == it2
+                {
+                    return current == rhs.current;
+                }
 
-            /// Returns true if both iterators refer to differents location within the list, and false otherwise.
-            bool operator!=(const const_iterator &rhs) const
-            {
-                return (current - rhs.current) != 0;
-            }
+                /// Returns true if both iterators refer to differents location within the list, and false otherwise.
+                bool operator!=(const const_iterator &rhs) const // it1 != it2
+                {
+                    return current != rhs.current;
+                }
 
-        protected:
-            Node *current;                              //<! The pointer to the node data.
-            const_iterator(Node *p) : current(p) {}
-            friend class list<T>;
+            protected:
+                Node *current;                              //<! The pointer to the node data.
+                const_iterator(Node *p) : current(p) {}     //<! Constructor that receives a pointer.
+                friend class list<T>;                       //<! List can access members of iterator.
         };  
-
         
-        class iterator : public const_iterator
-        {
-        public:
-            iterator() : const_iterator()
-            { /* Empty */ }
-            const T &operator*() const
-            {
-                return (this->current)->data;
-            }
-            
-            T &operator*()
-            {                
-                return (this->current)->data;  
-            }
-            iterator operator++()
-            {
-                this->current = this->current->next;
-                return iterator((this->current)->prev);
-            }  
+        class iterator {
+            public:
+                /// Default constructor that creates an nullptr.
+                iterator() : current(nullptr) { }
 
-            iterator operator++(int n)
-            {
-                this->current = (this->current)->next;
-                iterator it(this->current->prev);
-                return it;
-
+                /// Return a const reference to the object located at the position pointed by the iterator.
+                const T & operator* () const { return current->data; } // *it
                 
-            }
+                /// Return a reference to the object located at the position pointed by the iterator.
+                T & operator* () { return current->data; }
 
-            friend iterator operator+(iterator it, int n)
-            {
-                for(int i = 0; i < n; i++) 
+                /// Advances the iterator to the next location within the list and returns itself after that.
+                iterator operator++() { // ++it
+                    current = current->next;
+                    return iterator(current);
+                }  
+
+                /// Advances the iterator to the next location within the list and returns itself before that.
+                iterator operator++(int n) {
+                    iterator temp(current);
+                    current = current->next;
+                    return temp;                    
+                }   
+
+
+                iterator operator+(int n) {
+                    for (int i = 0; i < n; i++) {
+                        current = current->next;
+                    }
+
+                    return current;
+                }           
+                
+                /// Backs the iterator to the previous location within the list and returns itself after that.
+                iterator &operator--() // --it
                 {
-                    it.current = it.current->next;
+                    current = current->prev;
+                    return iterator(current);
                 }
 
-                return iterator(it.current);
-            }
-
-            friend iterator operator+(int n, iterator it)
-            {
-                for(int i = 0; i < n; i++) 
+                /// Backs the iterator to the previous location within the list and returns itself before that.
+                iterator operator--(int n) // it--
                 {
-                    it.current = it.current->next;
+                    iterator temp(current);
+                    current = current->prev;
+                    return temp;
+                }    
+
+                /// Returns true if both iterators refer to same location within the list, and false otherwise.
+                bool operator==(const iterator &rhs) const // it1 == it2
+                {
+                    return current == rhs.current;
                 }
 
-                return iterator(it.current);
-            }
-            
-            iterator &operator--()
-            {
-                this->current = (this->current)->prev;
-                const_iterator it((this->current)->next);
-                return it;
-            }
-
-            iterator operator--(int n)
-            {
-                iterator prev((this->current)->prev);
-                return prev;
-            }
-
-            friend iterator operator-(iterator it, int n)
-            {
-                for(int i = 0; i < n; i) 
+                /// Returns true if both iterators refer to differents location within the list, and false otherwise.
+                bool operator!=(const iterator &rhs) const // it1 != it2
                 {
-                    it->current = (it->current)->prev;
-                }
+                    return current != rhs.current;
+                }            
 
-                return it;
-            }
-
-            friend iterator operator-(int n, iterator it)
-            {
-                for(int i = 0; i < n; i) 
-                {
-                    it->current = (it->current)->prev;
-                }
-
-                return it;
-            }
-
-        protected:
-            iterator(Node *p) : const_iterator(p) {};
-            friend class list<T>;
-        };
+            protected:
+                Node *current;                              //<! The pointer to the node data.
+                iterator(Node *p) : current(p) {}          //<! Constructor that receives a pointer.
+                friend class list<T>;                       //<! List can access members of iterator.;
+        };        
 
         public:
         /// Default constructor that creates an empty list.
@@ -338,13 +269,11 @@ namespace sc {
         }
 
         iterator begin () {
-            iterator it(head->next);
-            return it;
+            return iterator(head->next);
         }
 
         iterator end () {
-            iterator it(tail->prev);
-            return it;
+            return iterator(tail->prev);
         }
 
         private:
