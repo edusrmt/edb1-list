@@ -58,8 +58,9 @@ int main( void )
 
         // recover elements to test.
         auto i{1};
-        for( auto e : seq2 )
+        for( auto e : seq2 ) {
             assert ( e == i++ );
+        }
 
         // Copy only part of the original range.
         sc::list<int> vec3(seq.begin() + 1, seq.begin() + 3 );

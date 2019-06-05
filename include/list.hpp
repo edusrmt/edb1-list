@@ -4,8 +4,8 @@
 #include <initializer_list>
 #include <iostream>
 
-using namespace std;
 using size_type = unsigned long;
+
 namespace sc {
     template <typename T>
     class list {
@@ -100,7 +100,7 @@ namespace sc {
                     return temp;                    
                 }   
 
-
+                /// Advances to the n-th successor node of the iterator and returns it.
                 iterator operator+(int n) {
                     for (int i = 0; i < n; i++) {
                         current = current->next;
@@ -123,6 +123,20 @@ namespace sc {
                     current = current->prev;
                     return temp;
                 }    
+
+                /// Returns the distance between the nodes (not between the adresses).
+                size_type operator- (iterator rhs)
+				{
+					size_type dis = 0;
+                    iterator cur(current);
+
+                    while  (rhs != cur) {
+                        dis++;
+                        rhs++;
+                    }
+                    std::cout << "DIS: " << dis << std::endl;
+					return dis;
+				}
 
                 /// Returns true if both iterators refer to same location within the list, and false otherwise.
                 bool operator==(const iterator &rhs) const // it1 == it2
@@ -175,32 +189,22 @@ namespace sc {
 
         /// Constructs the list with the contents of the range [first, last).
         template <typename InputIt>
-        list (InputIt first, InputIt last) : head{new Node}, tail{new Node} {
-            InputIt fCopy = first;
-            SIZE = 0;
-            while(fCopy != last) {
-                SIZE++;
-            }
-
+        list (InputIt first, InputIt last) : SIZE{last - first}, head{new Node}, tail{new Node} {
             head->prev = nullptr;
             tail->next = nullptr;
+            head->next = tail;
+            tail->prev = head;
 
-            if (SIZE > 0) {
-                Node *prevNode = head;
+            Node *curNode = head;
 
-                for (size_type i = 0; i < SIZE; i++) {
-                    Node *newNode = new Node;
-                    newNode->data = *(first + i);
-                    prevNode->next = newNode;
-                    newNode->prev = prevNode;
-                    prevNode = prevNode->next;
-                }
-
-                prevNode->next = tail;
-                tail->prev = prevNode;
-            } else {
-                head->next = tail;
-                tail->prev = head;
+            while (first != last) {
+                Node *newNode = new Node;
+                curNode->next = newNode;
+                newNode->prev = curNode;
+                curNode = curNode->next;
+                newNode->data = *(first++);
+                newNode->next = tail;
+                tail->prev = newNode;
             }
         }
 
@@ -273,7 +277,7 @@ namespace sc {
         }
 
         iterator end () {
-            return iterator(tail->prev);
+            return iterator(tail);
         }
 
         private:
