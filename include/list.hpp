@@ -148,7 +148,7 @@ namespace sc {
                 bool operator!=(const iterator &rhs) const // it1 != it2
                 {
                     return current != rhs.current;
-                }            
+                }    
 
             protected:
                 Node *current;                              //<! The pointer to the node data.
@@ -206,6 +206,27 @@ namespace sc {
                 newNode->next = tail;
                 tail->prev = newNode;
             }
+        }
+
+        /// Copy constructor. Constructs the list with the deep copy of the contents of other.        
+        list (const list & other) : SIZE{other.size()}, head{new Node}, tail{new Node} {
+            head->prev = nullptr;
+            head->next = tail;
+            tail->prev = head;
+            tail->next = nullptr;
+
+            Node *cp = other.head->next;
+            Node *curNode = head;
+
+            for (size_type i = 0; i < SIZE; i++) {
+                Node *newNode = new Node;
+                curNode->next = newNode;
+                newNode->prev = curNode;
+                curNode = curNode->next;
+                newNode->data = (cp++)->data;
+                newNode->next = tail;
+                tail->prev = newNode;
+            }            
         }
 
         /// Constructs the list with the contents of the initializer list init.
