@@ -41,7 +41,9 @@ int main( void )
         // recover elements to test.
         auto i{0};
         for ( auto it = seq.begin() ; it != seq.end() ; ++it, ++i )
+        {
             assert( *it == i+1 );
+        }
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -67,7 +69,7 @@ int main( void )
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     // Unit: copy constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": copy constructor.\n";

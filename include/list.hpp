@@ -2,7 +2,9 @@
 #define LIST_H
 
 #include <initializer_list>
+#include <iostream>
 
+using namespace std;
 using size_type = unsigned long;
 namespace sc {
     template <typename T>
@@ -31,37 +33,76 @@ namespace sc {
             /// Returns a value from the iterator pointer.
             const T &operator*() const
             {
-                return *current;
-            }
-
-            /// Advances the iterator to the next location within the list and returns itself before that.
-            const_iterator &operator++() // ++it;
-            {
-                const_iterator temp = *this;
-                current++;
-                return temp;
+                return current->data;
             }
 
             /// Advances the iterator to the next location within the list and returns itself after that.
-            const_iterator operator++(int n) // it++;
+            const_iterator &operator++() // ++it;
             {
-                current++;
-                return *this;
+                current = current->next;
+                return current;
             }
 
-            /// Backs the iterator to the previous location within the list and returns itself before that.
-            const_iterator &operator--() // --it;
+            /// Advances the iterator to the next location within the list and returns itself before that.
+            const_iterator operator++(int) // it++;
             {
-                const_iterator temp = *this;
-                current--;
-                return temp;
+                current = current->next;
+                const_iterator it(current->prev);
+                return it;
+            }
+            
+            /// Advances the iterator to the n-th location within the list and returns itself.
+            friend const_iterator operator+(const_iterator it, int n) // it++;
+            {
+                for(int i = 0; i < n; i) 
+                {
+                    it->current = it->current->next;
+                }
+
+                return it;
+            }
+            
+            friend const_iterator operator+(int n, const_iterator it) // it++;
+            {
+                for(int i = 0; i < n; i) 
+                {
+                    it->current = it->current->next;
+                }
+                return it;
             }
 
             /// Backs the iterator to the previous location within the list and returns itself after that.
-            const_iterator operator--(int n) // it--;
+            const_iterator &operator--() // --it;
             {
-                current--;
-                return *this;
+                current = current->prev;
+                const_iterator it(current->next);
+                return it;
+            }
+
+            /// Backs the iterator to the previous location within the list and returns itself before that.
+            const_iterator operator--(int) // it--;
+            {
+                const_iterator prev(current->prev);
+                return prev;
+            }
+
+            /// Backs the iterator to the n-th location within the list and returns itself after that.
+            friend const_iterator operator-(const_iterator it, int n) // it--;
+            {
+                for (int i = 0; i < n; i++) {
+                    it->current = it->current->prev;
+                }
+                
+                return it; 
+            }
+
+            friend const_iterator operator-(int n, const_iterator it) // it--;
+            {
+                for (int i = 0; i < n; i++) {
+                    it->current = it->current->prev;
+                }
+                
+                return it;
             }
 
             /// Returns true if both iterators refer to same location within the list, and false otherwise.
@@ -90,37 +131,79 @@ namespace sc {
             { /* Empty */ }
             const T &operator*() const
             {
-                return this->current.clear();
+                return (this->current)->data;
             }
             
             T &operator*()
-            {
-                return this->current->data;  
+            {                
+                return (this->current)->data;  
             }
-            iterator &operator++()
+            iterator operator++()
             {
-                iterator temp = *this;
-                (this->current)++;
-                return temp;
-            } 
+                this->current = this->current->next;
+                return iterator((this->current)->prev);
+            }  
 
             iterator operator++(int n)
             {
-                (this->current)++;
-                return *this;
+                this->current = (this->current)->next;
+                iterator it(this->current->prev);
+                return it;
+
+                
+            }
+
+            friend iterator operator+(iterator it, int n)
+            {
+                for(int i = 0; i < n; i++) 
+                {
+                    it.current = it.current->next;
+                }
+
+                return iterator(it.current);
+            }
+
+            friend iterator operator+(int n, iterator it)
+            {
+                for(int i = 0; i < n; i++) 
+                {
+                    it.current = it.current->next;
+                }
+
+                return iterator(it.current);
             }
             
             iterator &operator--()
             {
-                iterator temp = *this;
-                (this->current)--;
-                return temp;
+                this->current = (this->current)->prev;
+                const_iterator it((this->current)->next);
+                return it;
             }
 
             iterator operator--(int n)
             {
-                (this->current)--;
-                return *this;
+                iterator prev((this->current)->prev);
+                return prev;
+            }
+
+            friend iterator operator-(iterator it, int n)
+            {
+                for(int i = 0; i < n; i) 
+                {
+                    it->current = (it->current)->prev;
+                }
+
+                return it;
+            }
+
+            friend iterator operator-(int n, iterator it)
+            {
+                for(int i = 0; i < n; i) 
+                {
+                    it->current = (it->current)->prev;
+                }
+
+                return it;
             }
 
         protected:
@@ -161,24 +244,29 @@ namespace sc {
 
         /// Constructs the list with the contents of the range [first, last).
         template <typename InputIt>
-        list (InputIt first, InputIt last) : SIZE{last - first}, head{new Node}, tail{new Node} {
+        list (InputIt first, InputIt last) : head{new Node}, tail{new Node} {
+            InputIt fCopy = first;
+            SIZE = 0;
+            while(fCopy != last) {
+                SIZE++;
+            }
+
             head->prev = nullptr;
             tail->next = nullptr;
 
             if (SIZE > 0) {
                 Node *prevNode = head;
-                Node *curNode = first;
 
                 for (size_type i = 0; i < SIZE; i++) {
                     Node *newNode = new Node;
-                    newNode->data = curNode->data;
+                    newNode->data = *(first + i);
                     prevNode->next = newNode;
                     newNode->prev = prevNode;
-                    prevNode = newNode;
-                    curNode = curNode->next;
+                    prevNode = prevNode->next;
                 }
 
                 prevNode->next = tail;
+                tail->prev = prevNode;
             } else {
                 head->next = tail;
                 tail->prev = head;
@@ -189,7 +277,6 @@ namespace sc {
         list( std::initializer_list<T> ilist) : SIZE{ilist.size()}, head{new Node}, tail{new Node} {
             head->prev = nullptr;
             tail->next = nullptr;
-
             if (SIZE > 0) {
                 Node *prevNode = head;
 
@@ -201,7 +288,8 @@ namespace sc {
                     prevNode = newNode;
                 }
 
-                prevNode->next = tail;
+                prevNode->next = tail; 
+                tail->prev = prevNode;
             } else {
                 head->next = tail;
                 tail->prev = head;
@@ -231,7 +319,17 @@ namespace sc {
 
         /// Remove all elements from the container.
         void clear () {
+            Node *curNode = head->next;
 
+            while (curNode->next != nullptr) {
+                curNode = curNode->next;
+                delete curNode->prev;
+            }
+
+            head->next = tail;
+            tail->prev = head;
+
+            SIZE = 0;
         }
 
         /// Returns true if the container contains no elements, and false otherwise.
