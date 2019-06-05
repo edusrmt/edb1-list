@@ -21,7 +21,7 @@ int main( void )
         assert( seq.empty() == true );
         std::cout << ">>> Passed!\n\n";
     }
-    /*
+    
     // Unit #2: constructor (size)
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": constructor(size).\n";
@@ -30,7 +30,7 @@ int main( void )
         assert( seq.empty() == false );
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     // Unit #3: initializer list constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": initializer list constructor.\n";
@@ -45,7 +45,7 @@ int main( void )
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    /*
     // Unit #5: range constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": range constructor.\n";
