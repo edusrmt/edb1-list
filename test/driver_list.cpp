@@ -1,155 +1,156 @@
-#include <iostream>  // cout, endl
-#include <cassert>   // assert()
+#include <iostream> // cout, endl
+#include <cassert>  // assert()
 #include "../include/list.hpp"
 
-template < typename T = int >
-sc::list<T> createVec( const sc::list<T> & _v )
+template <typename T = int>
+sc::list<T> createVec(const sc::list<T> &_v)
 {
-    sc::list<T> temp( _v );
+    sc::list<T> temp(_v);
     return _v;
 }
 
 // The vector/iterator driver.
-int main( void )
+int main(void)
 {
     auto n_unit{0};
     // Unit #1: default constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": default constructor.\n";
         sc::list<int> seq;
-        assert( seq.size() == 0 );
-        assert( seq.empty() == true );
+        assert(seq.size() == 0);
+        assert(seq.empty() == true);
         std::cout << ">>> Passed!\n\n";
     }
-    
+
     // Unit #2: constructor (size)
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": constructor(size).\n";
         sc::list<int> seq(10);
-        assert( seq.size() == 10 );
-        assert( seq.empty() == false );
+        assert(seq.size() == 10);
+        assert(seq.empty() == false);
         std::cout << ">>> Passed!\n\n";
     }
-    
+
     // Unit #3: initializer list constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": initializer list constructor.\n";
-        sc::list<int> seq{ 1, 2, 3, 4, 5 };
-        assert( seq.size() == 5 );
-        assert( seq.empty() == false );
+        sc::list<int> seq{1, 2, 3, 4, 5};
+        assert(seq.size() == 5);
+        assert(seq.empty() == false);
 
         // recover elements to test.
         auto i{0};
-        for ( auto it = seq.begin() ; it != seq.end() ; ++it, ++i )
+        for (auto it = seq.begin(); it != seq.end(); ++it, ++i)
         {
-            assert( *it == i+1 );
+            assert(*it == i + 1);
         }
 
         std::cout << ">>> Passed!\n\n";
     }
-    
+
     // Unit #5: range constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": range constructor.\n";
-        sc::list<int> seq{ 1, 2, 3, 4, 5 };
-        sc::list<int> seq2( seq.begin(), seq.end() );
-        assert( seq2.size() == 5 );
-        assert( seq2.empty() == false );
+        sc::list<int> seq{1, 2, 3, 4, 5};
+        sc::list<int> seq2(seq.begin(), seq.end());
+        assert(seq2.size() == 5);
+        assert(seq2.empty() == false);
 
         // recover elements to test.
         auto i{1};
-        for( auto e : seq2 ) {
-            assert ( e == i++ );
+        for (auto e : seq2)
+        {
+            assert(e == i++);
         }
 
         // Copy only part of the original range.
-        sc::list<int> vec3(seq.begin() + 1, seq.begin() + 3 );
+        sc::list<int> vec3(seq.begin() + 1, seq.begin() + 3);
         auto it2 = seq.begin() + 1;
-        for ( auto it = vec3.begin() ; it != vec3.end() ; ++it, ++it2 )
-            assert( *it == *it2 );
+        for (auto it = vec3.begin(); it != vec3.end(); ++it, ++it2)
+            assert(*it == *it2);
 
         std::cout << ">>> Passed!\n\n";
     }
-    
+
     // Unit: copy constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": copy constructor.\n";
-        sc::list<int> seq{ 1, 2, 3, 4, 5 };
-        sc::list<int> seq2( seq );
-        assert( seq2.size() == 5 );
-        assert( seq2.empty() == false );
+        sc::list<int> seq{1, 2, 3, 4, 5};
+        sc::list<int> seq2(seq);
+        assert(seq2.size() == 5);
+        assert(seq2.empty() == false);
 
         // recover elements to test.
         auto i{1};
-        for( auto e : seq2 )
-            assert ( e == i++ );
+        for (auto e : seq2)
+            assert(e == i++);
 
         // Changing seq (the original)...
-        auto it = seq.begin() + 2 ;
+        auto it = seq.begin() + 2;
         *it = 10;
         // ... should not alter the copy.
         i = 1;
-        for( auto e : seq2 )
-            std::cout<< e << " == " << i++;
-            //assert ( e == i++ );
+        for (auto e : seq2)
+            std::cout << e << " == " << i++;
+        //assert ( e == i++ );
 
         std::cout << ">>> Passed!\n\n";
     }
-    /*
+
     // Unit: move constructor
-#ifdef MOVE_SYNTAX_IMPLEMENTED
+    //#ifdef MOVE_SYNTAX_IMPLEMENTED
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": move constructor.\n";
-        sc::list<int> seq{ 1, 2, 3, 4, 5 };
-        sc::list<int> seq2( std::move( seq ) );
-        assert( seq2.size() == 5 );
-        assert( seq2.empty() == false );
+        sc::list<int> seq{1, 2, 3, 4, 5};
+        sc::list<int> seq2(std::move(seq));
+        assert(seq2.size() == 5);
+        assert(seq2.empty() == false);
 
         // recover elements to test.
         auto i{1};
-        for( auto e : seq2 )
-            assert ( e == i++ );
+        for (auto e : seq2)
+            assert(e == i++);
 
         std::cout << ">>> Passed!\n\n";
     }
-#endif
+    //#endif
 
     // Unit: Assign operator.
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": assign operator.\n";
-        sc::list<int> seq{ 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
         sc::list<int> seq2;
 
         seq2 = seq;
-        assert( seq2.size() == 5 );
-        assert( seq2.empty() == false );
+        assert(seq2.size() == 5);
+        assert(seq2.empty() == false);
 
         // recover elements to test.
         auto i{1};
-        for( auto e : seq2 )
-            assert ( e == i++ );
+        for (auto e : seq2)
+            assert(e == i++);
 
         std::cout << ">>> Passed!\n\n";
     }
 
     // Unit: Move assign operator.
 #ifdef MOVE_SYNTAX_IMPLEMENTED
-    // 
+    //
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": move assign operator.\n";
-        sc::list<int> seq{ 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
         sc::list<int> seq2;
 
-        seq2 = std::move( seq );
-        assert( seq2.size() == 5 );
-        assert( seq2.empty() == false );
-        assert( seq.size() == 0 );
-        assert( seq.empty() == true );
+        seq2 = std::move(seq);
+        assert(seq2.size() == 5);
+        assert(seq2.empty() == false);
+        assert(seq.size() == 0);
+        assert(seq.empty() == true);
 
         // recover elements to test.
         auto i{1};
-        for( auto e : seq2 )
-            assert ( e == i++ );
+        for (auto e : seq2)
+            assert(e == i++);
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -157,29 +158,29 @@ int main( void )
 
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": initializer list assignment.\n";
-        sc::list<int> seq = { 1, 2, 3, 4, 5 };
+        sc::list<int> seq = {1, 2, 3, 4, 5};
 
-        assert( seq.size() == 5 );
-        assert( seq.empty() == false );
+        assert(seq.size() == 5);
+        assert(seq.empty() == false);
 
         // recover elements to test.
         auto i{1};
-        for( auto e : seq )
-            assert ( e == i++ );
+        for (auto e : seq)
+            assert(e == i++);
 
         std::cout << ">>> Passed!\n\n";
     }
 
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": clear().\n";
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
 
-        assert( seq.size() == 5 );
-        assert( seq.empty() == false );
+        assert(seq.size() == 5);
+        assert(seq.empty() == false);
 
         seq.clear();
-        assert( seq.size() == 0 );
-        assert( seq.empty() == true );
+        assert(seq.size() == 0);
+        assert(seq.empty() == true);
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -190,29 +191,31 @@ int main( void )
         // #1 From an empty vector.
         sc::list<int> seq;
 
-        assert( seq.empty() == true );
-        for ( auto i{0u} ; i < 5 ; ++i )
+        assert(seq.empty() == true);
+        for (auto i{0u}; i < 5; ++i)
         {
-            seq.push_front( i+1 );
-            assert( seq.size() == i+1 );
+            seq.push_front(i + 1);
+            assert(seq.size() == i + 1);
         }
-        assert( seq.empty() == false );
+
+        assert(seq.empty() == false);
 
         auto i{5};
-        for ( const auto & e: seq )
-            assert( e == i-- );
+        for (const auto &e : seq)
+            assert(e == i--);
 
         seq.clear();
-        assert( seq.empty() == true );
-        for ( auto i{0u} ; i < 5 ; ++i )
+        assert(seq.empty() == true);
+        for (auto i{0u}; i < 5; ++i)
         {
-            seq.push_front( i+1 );
-            assert( seq.size() == i+1 );
+            seq.push_front(i + 1);
+            assert(seq.size() == i + 1);
         }
-        assert( seq.empty() == false );
+        assert(seq.empty() == false);
+
         i = 5;
-        for ( const auto & e: seq )
-            assert( e == i-- );
+        for (const auto &e : seq)
+            assert(e == i--);
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -223,65 +226,67 @@ int main( void )
         // #1 From an empty vector.
         sc::list<int> seq;
 
-        assert( seq.empty() == true );
-        for ( auto i{0u} ; i < 5 ; ++i )
+        assert(seq.empty() == true);
+        for (auto i{0u}; i < 5; ++i)
         {
-            seq.push_back( i+1 );
-            assert( seq.size() == i+1 );
+            seq.push_back(i + 1);
+            assert(seq.size() == i + 1);
         }
-        assert( seq.empty() == false );
+
+        assert(seq.empty() == false);
 
         auto i{0};
-        for ( const auto & e: seq )
-            assert( e == ++i );
+        for (const auto &e : seq)
+            assert(e == ++i);
 
         seq.clear();
-        assert( seq.empty() == true );
-        for ( auto i{0u} ; i < 5 ; ++i )
+        assert(seq.empty() == true);
+        for (auto i{0u}; i < 5; ++i)
         {
-            seq.push_back( i+1 );
-            assert( seq.size() == i+1 );
+            seq.push_back(i + 1);
+            assert(seq.size() == i + 1);
         }
-        assert( seq.empty() == false );
+
+        assert(seq.empty() == false);
         i = 0;
-        for ( const auto & e: seq )
-            assert( e == ++i );
+        for (const auto &e : seq)
+            assert(e == ++i);
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    /*
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": pop_back().\n";
 
         // #1 From an empty vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
 
-        while( not seq.empty() )
+        while (not seq.empty())
         {
             seq.pop_back();
             // Checke whether we have the same list except for the last.
-            auto i {0};
-            for ( const auto & e: seq )
-                assert( e == ++i );
+            auto i{0};
+            for (const auto &e : seq)
+                assert(e == ++i);
         }
 
         std::cout << ">>> Passed!\n\n";
     }
-
+*/
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": pop_front().\n";
 
         // #1 From an empty vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
 
         auto start{1};
-        while( not seq.empty() )
+        while (not seq.empty())
         {
             seq.pop_front();
             // Check whether we have the same list except for the first.
-            auto i {start};
-            for ( const auto & e: seq )
-                assert( e == ++i );
+            auto i{start};
+            for (const auto &e : seq)
+                assert(e == ++i);
 
             start++;
         }
@@ -293,48 +298,48 @@ int main( void )
         std::cout << ">>> Unit teste #" << ++n_unit << ": front().\n";
 
         // #1 From an empty vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
 
         auto i{0};
-        while( not seq.empty() )
+        while (not seq.empty())
         {
-            assert( seq.front() == ++i );
+            assert(seq.front() == ++i);
             seq.pop_front();
         }
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    /*
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": back().\n";
 
         // #1 From an empty vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
 
         auto i{5};
-        while( not seq.empty() )
+        while (not seq.empty())
         {
-            assert( seq.back() == i-- );
+            assert(seq.back() == i--);
             seq.pop_back();
         }
 
         std::cout << ">>> Passed!\n\n";
     }
-
+*/
 
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": operator==().\n";
 
         // #1 From an empty vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
-        sc::list<int> seq2 { 1, 2, 3, 4, 5 };
-        sc::list<int> vec3 { 1, 2, 8, 4, 5 };
-        sc::list<int> vec4 { 8, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
+        sc::list<int> seq2{1, 2, 3, 4, 5};
+        sc::list<int> vec3{1, 2, 8, 4, 5};
+        sc::list<int> vec4{8, 4, 5};
 
-        assert( seq == seq2 );
-        assert( not ( seq == vec3 ) );
-        assert( not ( seq == vec4 ) );
-        assert( seq == ( sc::list<int>{ 1, 2, 3, 4, 5 } ) );
+        assert(seq == seq2);
+        assert(not(seq == vec3));
+        assert(not(seq == vec4));
+        assert(seq == (sc::list<int>{1, 2, 3, 4, 5}));
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -343,15 +348,15 @@ int main( void )
         std::cout << ">>> Unit teste #" << ++n_unit << ": operator!=().\n";
 
         // #1 From an empty vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
-        sc::list<int> seq2 { 1, 2, 3, 4, 5 };
-        sc::list<int> vec3 { 1, 2, 8, 4, 5 };
-        sc::list<int> vec4 { 8, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
+        sc::list<int> seq2{1, 2, 3, 4, 5};
+        sc::list<int> vec3{1, 2, 8, 4, 5};
+        sc::list<int> vec4{8, 4, 5};
 
-        assert( not( seq != seq2 ) );
-        assert( seq != vec3 );
-        assert( seq != vec4 );
-        assert( seq != ( sc::list<int>{ 1, 2, 3 } ) );
+        assert(not(seq != seq2));
+        assert(seq != vec3);
+        assert(seq != vec4);
+        assert(seq != (sc::list<int>{1, 2, 3}));
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -360,10 +365,10 @@ int main( void )
         std::cout << ">>> Unit teste #" << ++n_unit << ": insert(pos, value).\n";
 
         // #1 From an empty vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
 
-        seq.insert( seq.begin(), 0 );
-        assert( seq == ( sc::list<int>{ 0, 1, 2, 3, 4, 5 } ) );
+        seq.insert(seq.begin(), 0);
+        assert(seq == (sc::list<int>{0, 1, 2, 3, 4, 5}));
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -372,37 +377,53 @@ int main( void )
         std::cout << ">>> Unit teste #" << ++n_unit << ": insert(pos, first, last).\n";
 
         // Aux arrays.
-        sc::list<int> seq1 { 1, 2, 3, 4, 5 };
-        sc::list<int> seq2 { 1, 2, 3, 4, 5 };
-        sc::list<int> source { 6, 7, 8, 9, 10 };
+        sc::list<int> seq1{1, 2, 3, 4, 5};
+        sc::list<int> seq2{1, 2, 3, 4, 5};
+        sc::list<int> source{6, 7, 8, 9, 10};
 
         std::cout << ">>> seq1 size is: " << seq1.size() << '\n';
         // Insert at the begining.
-        seq1.insert( seq1.begin(), source.begin(), source.end() );
-        std::cout << ">>> Seq1 == " << seq1 << std::endl;
+        seq1.insert(seq1.begin(), source.begin(), source.end());
+        std::cout << ">>> Seq1 == ";
+
+        for (const auto &e : seq1)
+            std::cout << "{" << e << "}";
+
+        std::cout << std::endl;
         std::cout << ">>> seq1 size is: " << seq1.size() << '\n';
-        assert( seq1 == ( sc::list<int>{ 6, 7, 8, 9, 10, 1, 2, 3, 4, 5 } ) );
+        assert(seq1 == (sc::list<int>{6, 7, 8, 9, 10, 1, 2, 3, 4, 5}));
         std::cout << ">>> Ok\n\n";
 
         // In the middle
         seq1 = seq2;
-        seq1.insert( std::next( seq1.begin(), 2 ), source.begin(), source.end() );
-        std::cout << ">>> Seq1 == " << seq1 << std::endl;
+        seq1.insert(std::next(seq1.begin(), 2), source.begin(), source.end());
+        std::cout << ">>> Seq1 == ";
+
+        for (const auto &e : seq1)
+            std::cout << "{" << e << "}";
+
+        std::cout << std::endl;
         std::cout << ">>> seq1 size is: " << seq1.size() << '\n';
-        assert( seq1 == ( sc::list<int>{ 1, 2, 6, 7, 8, 9, 10, 3, 4, 5 } ) );
+        assert(seq1 == (sc::list<int>{1, 2, 6, 7, 8, 9, 10, 3, 4, 5}));
         std::cout << ">>> Ok2\n\n";
 
         // At the end
         seq1 = seq2;
-        seq1.insert( seq1.end(), source.begin(), source.end() );
-        std::cout << ">>> Seq1 == " << seq1 << std::endl;
-        std::cout << ">>> seq1 size is: " << seq1.size() << '\n';
-        assert( seq1 == ( sc::list<int>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } ) );
-        std::cout << ">>> Ok3\n\n";
+        seq1.insert(seq1.end(), source.begin(), source.end());
+        std::cout << ">>> Seq1 == ";
 
+        for (const auto &e : seq1)
+            std::cout << "{" << e << "}";
+
+        std::cout << std::endl;
+        std::cout << ">>> seq1 size is: " << seq1.size() << '\n';
+        assert(seq1 == (sc::list<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
+        std::cout << ">>> Ok3\n\n";
 
         std::cout << ">>> Passed!\n\n";
     }
+    /*
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": insert(pos, initializer_list).\n";
 
