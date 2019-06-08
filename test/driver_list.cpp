@@ -12,6 +12,7 @@ sc::list<T> createVec(const sc::list<T> &_v)
 // The vector/iterator driver.
 int main(void)
 {
+    
     auto n_unit{0};
     // Unit #1: default constructor
     {
@@ -21,7 +22,7 @@ int main(void)
         assert(seq.empty() == true);
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     // Unit #2: constructor (size)
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": constructor(size).\n";
@@ -30,7 +31,7 @@ int main(void)
         assert(seq.empty() == false);
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     // Unit #3: initializer list constructor
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": initializer list constructor.\n";
@@ -95,7 +96,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     // Unit: move constructor
     //#ifdef MOVE_SYNTAX_IMPLEMENTED
     {
@@ -113,7 +114,7 @@ int main(void)
         std::cout << ">>> Passed!\n\n";
     }
     //#endif
-
+    
     // Unit: Assign operator.
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": assign operator.\n";
@@ -131,7 +132,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     // Unit: Move assign operator.
 #ifdef MOVE_SYNTAX_IMPLEMENTED
     //
@@ -183,7 +184,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": push_front().\n";
 
@@ -218,7 +219,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": push_back().\n";
 
@@ -292,7 +293,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": front().\n";
 
@@ -358,7 +359,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": insert(pos, value).\n";
 
@@ -370,7 +371,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": insert(pos, first, last).\n";
 
@@ -378,25 +379,25 @@ int main(void)
         sc::list<int> seq1{1, 2, 3, 4, 5};
         sc::list<int> seq2{1, 2, 3, 4, 5};
         sc::list<int> source{6, 7, 8, 9, 10};
-
+        
         std::cout << ">>> seq1 size is: " << seq1.size() << '\n';
         // Insert at the begining.
         seq1.insert(seq1.begin(), source.begin(), source.end());
         std::cout << ">>> Seq1 == ";
-
+        
         for (const auto &e : seq1)
             std::cout << "{" << e << "}";
-
+        
         std::cout << std::endl;
         std::cout << ">>> seq1 size is: " << seq1.size() << '\n';
         assert(seq1 == (sc::list<int>{6, 7, 8, 9, 10, 1, 2, 3, 4, 5}));
         std::cout << ">>> Ok\n\n";
-
+        
         // In the middle
         seq1 = seq2;
         seq1.insert(seq1.begin() + 2, source.begin(), source.end());
         std::cout << ">>> Seq1 == ";
-
+        
         for (const auto &e : seq1)
             std::cout << "{" << e << "}";
 
@@ -420,7 +421,6 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-    
     
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": insert(pos, initializer_list).\n";

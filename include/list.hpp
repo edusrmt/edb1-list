@@ -343,8 +343,9 @@ public:
 
         while (curNode->next != nullptr)
         {
-            curNode = curNode->next;
-            delete curNode->prev;
+            Node *nxt = curNode->next;
+            delete curNode;
+            curNode = nxt;
         }
 
         head->next = tail;
@@ -435,29 +436,22 @@ public:
     /// Copy the size and values from another list.
     list &operator=(list other)
     {
-        SIZE = other.size();
-        head = new Node;
-        tail = new Node;
-
-        head->prev = nullptr;
-        tail->next = nullptr;
-        head->next = tail;
-        tail->prev = head;
-
-        Node *cp = other.head->next;
+        clear();
+        iterator cpy(other.begin());
         Node *curNode = head;
 
-        for (size_type i = 0; i < SIZE; i++)
-        {
+        for (size_type i = 0; i < other.size(); i++) {
             Node *newNode = new Node;
-            curNode->next = newNode;
+            
+            newNode->data = *(cpy++);
             newNode->prev = curNode;
-            curNode = curNode->next;
-            newNode->data = cp->data;
             newNode->next = tail;
+
+            curNode->next = newNode;
             tail->prev = newNode;
 
-            cp = cp->next;
+            curNode = curNode->next;
+            SIZE++;
         }
 
         return *this;
@@ -513,6 +507,7 @@ public:
 
     void assign(std::initializer_list<T> ilist) {}
 
+    /// Adds value into the list before the position given by the iterator pos and returns an iterator to the position of the inserted item.
     iterator insert(iterator itr, const T &value)
     {
         SIZE += 1;
@@ -535,35 +530,19 @@ public:
         newNode->prev = prevNode;
         prevNode->next = newNode;
 
-        return first;
+        return iterator(newNode);
     }
 
+    /// Inserts elements from the range [first; last) before pos.
     template <class InItr>
     iterator insert(iterator pos, InItr first, InItr last)
     {
-        size_type cpySize = last - first;
-        SIZE += cpySize;
-        iterator start(begin());
-
-        Node *curNode = head->next;
-        while (start != pos)
-        {
-            curNode = curNode->next;
-            start++;
-        }
-
+        const size_type cpySize = last - first;        
         --last;
 
         for (size_type i = 0; i < cpySize; i++, last--) {
-            Node *newNode = new Node;
-            
-            newNode->prev = curNode->prev;
-            newNode->next = curNode;
-            newNode->data = *(last);
-
-            curNode->prev->next = newNode;
-            curNode->prev = newNode;
-            curNode = newNode;
+            T vl = *(last);
+            pos = insert(pos, vl);
         } 
 
         return pos;
