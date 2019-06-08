@@ -1,5 +1,13 @@
 # Lista Encadeada
 
+## Sumário
+
+- **[1. Introdução](#1-introducao)**
+- **[2. Compilando](#2-compilando)**
+- **[3. Testes](#3-testes)**
+- **[4. Uso](#4-uso)**
+- **[5. Autoria](#5-autoria)**
+
 ## 1. Introdução
 
 Esse projeto implementa uma lista de Tipo de Dado Abstrato, baseado em uma lista duplamente encadeada.
