@@ -290,22 +290,13 @@ public:
 
     ~list()
     {
-        Node *curNode = head->next;
+        Node *curNode = head;
 
         while (curNode != nullptr)
         {
-            delete curNode->prev;
-
-            if (curNode->next == nullptr)
-            {
-                Node *prevNode = curNode;
-                curNode = curNode->next;
-                delete prevNode;
-            }
-            else
-            {
-                curNode = curNode->next;
-            }
+            Node *nxt = curNode->next;
+            delete curNode;
+            curNode = nxt;            
         }
     }
 
@@ -421,16 +412,24 @@ public:
     /// Removes value of the front of the list.
     void pop_front()
     {
-        SIZE -= 1;
-        head->next = head->next->next;
+        SIZE--;
+        Node *popped = head->next;
+        std::cout << "Popping " << popped->data << std::endl;
+        head->next = popped->next;
+        popped->next->prev = head;
+        delete popped;
     }
 
     /// Removes value of the back of the list.
     void pop_back()
     {
         SIZE -= 1;
-        tail->prev = tail->prev->prev;
+        Node *popped = tail->prev;
+        tail->prev = popped->prev;
+        popped->prev->next = tail;
+        delete popped;
     }
+
     void assign(const T &value);
 
     /// Copy the size and values from another list.

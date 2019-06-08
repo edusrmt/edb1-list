@@ -91,8 +91,7 @@ int main(void)
         // ... should not alter the copy.
         i = 1;
         for (auto e : seq2)
-            std::cout << e << " == " << i++;
-        //assert ( e == i++ );
+            assert ( e == i++ );
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -254,7 +253,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-    /*
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": pop_back().\n";
 
@@ -272,19 +271,19 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-*/
+
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": pop_front().\n";
 
         // #1 From an empty vector.
         sc::list<int> seq{1, 2, 3, 4, 5};
 
-        auto start{1};
+        int start = 1;
         while (not seq.empty())
         {
             seq.pop_front();
-            // Check whether we have the same list except for the first.
-            auto i{start};
+            // Check whether we have the same list except for the first.   
+            int i = start;
             for (const auto &e : seq)
                 assert(e == ++i);
 
@@ -309,7 +308,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-    /* SE ESSE TESTE NÃO ESTIVER COMENTADO, ELE FUNCIONA, MAS OS SEGUINTES DÃO ERRO.
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": back().\n";
 
@@ -324,7 +323,7 @@ int main(void)
         }
 
         std::cout << ">>> Passed!\n\n";
-    }*/
+    }
     
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": operator==().\n";
@@ -338,7 +337,7 @@ int main(void)
         assert(seq == seq2);
         assert(not(seq == vec3));
         assert(not(seq == vec4));
-        assert(seq == (sc::list<int>{1, 2, 3, 4, 5}));*/
+        assert(seq == (sc::list<int>{1, 2, 3, 4, 5}));
 
         std::cout << ">>> Passed!\n\n";
     }
