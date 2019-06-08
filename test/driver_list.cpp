@@ -447,35 +447,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-#ifdef IGNORE_THIS
-// This method has the same signature as the assign( InItr, InItr ) of InItr is an integral type.
-// So, we must block this for a while (until C++11).
-    {
-        std::cout << ">>> Unit teste #" << ++n_unit << ": assign(count, value).\n";
 
-        // Initial vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
-
-        // assigning count values to sc::list, with count < size().
-        seq.assign( 3, -1 );
-        assert( seq == ( sc::list<int>{ -1, -1, -1 } ) );
-        assert( seq.size() == 3 );
-
-        // assigning count values to sc::list, with count == size().
-        seq = { 1, 2, 3, 4, 5 };
-        seq.assign( 5, -1 );
-        assert( seq == ( sc::list<int>{ -1, -1, -1, -1, -1 } ) );
-        assert( seq.size() == 5 );
-
-        // assigning count values to sc::list, with count > size().
-        seq = { 1, 2, 3, 4, 5 };
-        seq.assign( 8, -1 );
-        assert( seq == ( sc::list<int>{ -1, -1, -1, -1, -1, -1, -1, -1 } ) );
-        assert( seq.size() == 8 );
-
-        std::cout << ">>> Passed!\n\n";
-    }
-#endif
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": erase(first, last) and erase(pos).\n";
 
