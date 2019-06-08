@@ -2,7 +2,7 @@
 
 ## Sumário
 
-- **[1. Introdução](#1-introducao)**
+- **[1. Introdução](#1-introdução)**
 - **[2. Compilando](#2-compilando)**
 - **[3. Testes](#3-testes)**
 - **[4. Uso](#4-uso)**
