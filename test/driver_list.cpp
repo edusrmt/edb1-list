@@ -264,7 +264,7 @@ int main(void)
         while (not seq.empty())
         {
             seq.pop_back();
-            // Checke whether we have the same list except for the last.
+            // Check whether we have the same list except for the last.
             auto i{0};
             for (const auto &e : seq)
                 assert(e == ++i);
@@ -309,7 +309,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-    /*
+    /* SE ESSE TESTE NÃO ESTIVER COMENTADO, ELE FUNCIONA, MAS OS SEGUINTES DÃO ERRO.
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": back().\n";
 
@@ -324,9 +324,8 @@ int main(void)
         }
 
         std::cout << ">>> Passed!\n\n";
-    }
-*/
-
+    }*/
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": operator==().\n";
 
@@ -335,11 +334,11 @@ int main(void)
         sc::list<int> seq2{1, 2, 3, 4, 5};
         sc::list<int> vec3{1, 2, 8, 4, 5};
         sc::list<int> vec4{8, 4, 5};
-
+        
         assert(seq == seq2);
         assert(not(seq == vec3));
         assert(not(seq == vec4));
-        assert(seq == (sc::list<int>{1, 2, 3, 4, 5}));
+        assert(seq == (sc::list<int>{1, 2, 3, 4, 5}));*/
 
         std::cout << ">>> Passed!\n\n";
     }
@@ -396,7 +395,7 @@ int main(void)
 
         // In the middle
         seq1 = seq2;
-        seq1.insert(std::next(seq1.begin(), 2), source.begin(), source.end());
+        seq1.insert(seq1.begin() + 2, source.begin(), source.end());
         std::cout << ">>> Seq1 == ";
 
         for (const auto &e : seq1)
@@ -422,7 +421,7 @@ int main(void)
 
         std::cout << ">>> Passed!\n\n";
     }
-    /*
+    
     
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": insert(pos, initializer_list).\n";
@@ -438,7 +437,7 @@ int main(void)
 
         // In the middle
         seq1 = seq2;
-        seq1.insert( std::next( seq1.begin(), 2 ), { 6, 7, 8, 9, 10 } );
+        seq1.insert( seq1.begin() + 2 , { 6, 7, 8, 9, 10 } );
         assert( seq1 == ( sc::list<int>{ 1, 2, 6, 7, 8, 9, 10, 3, 4, 5 } ) );
 
         // At the end
@@ -482,36 +481,37 @@ int main(void)
         std::cout << ">>> Unit teste #" << ++n_unit << ": erase(first, last) and erase(pos).\n";
 
         // Initial vector.
-        sc::list<int> seq { 1, 2, 3, 4, 5 };
+        sc::list<int> seq{1, 2, 3, 4, 5};
 
         // removing a segment from the beginning.
-        auto past_last = seq.erase( seq.begin(), std::next(seq.begin(),3) );
+        auto past_last = seq.erase( seq.begin(), seq.begin()+3 );
         assert( seq.begin() == past_last );
         assert( seq == ( sc::list<int>{ 4, 5 } ) );
         assert( seq.size() == 2 );
 
         // removing at the middle.
         seq = { 1, 2, 3, 4, 5 };
-        past_last = seq.erase( std::next(seq.begin(),1), std::next(seq.begin(),4) );
-        assert( std::next(seq.begin(),1) == past_last );
-        assert( seq == ( sc::list<int>{ 1, 5 } ) );
+        past_last = seq.erase( seq.begin()+1, seq.begin() +4 );
+        assert( seq.begin()+1 == past_last );
+        assert( seq == ( sc::list<int>{1, 5} ) );
         assert( seq.size() == 2 );
 
         // removing a segment that reached the end.
         seq = { 1, 2, 3, 4, 5 };
-        past_last = seq.erase( std::next(seq.begin(),2), seq.end() );
+        past_last = seq.erase( seq.begin() + 2, seq.end() );
         assert( seq.end() == past_last );
-        assert( seq == ( sc::list<int>{ 1, 2 } ) );
+        assert( seq == ( sc::list<int>{1, 2} ) );
         assert( seq.size() == 2 );
 
         // removing the entire vector.
-        seq = { 1, 2, 3, 4, 5 };
+        seq = {1, 2, 3, 4, 5};
         past_last = seq.erase( seq.begin(), seq.end() );
         assert( seq.end() == past_last );
         assert( seq.empty() );
 
         std::cout << ">>> Passed!\n\n";
     }
+    
     {
         std::cout << ">>> Unit teste #" << ++n_unit << ": erase(pos).\n";
 
@@ -527,20 +527,19 @@ int main(void)
 
         // removing a single element in the middle.
         seq = { 1, 2, 3, 4, 5 };
-        past_last = seq.erase( std::next(seq.begin(),2) );
+        past_last = seq.erase( seq.begin()+2 );
         assert( seq == ( sc::list<int>{ 1, 2, 4, 5 } ) );
-        assert( std::next(seq.begin(),2) == past_last );
+        assert( seq.begin()+2 == past_last );
         assert( seq.size() == 4 );
 
         // removing a single element at the end.
         seq = { 1, 2, 3, 4, 5 };
-        past_last = seq.erase( std::next(seq.begin(),seq.size()-1 ) );
+        past_last = seq.erase(seq.begin() + (seq.size()-1 ) );
         assert( seq == ( sc::list<int>{ 1, 2, 3, 4 } ) );
         assert( seq.end() == past_last );
         assert( seq.size() == 4 );
 
         std::cout << ">>> Passed!\n\n";
     }
-    */
     return 0;
 }

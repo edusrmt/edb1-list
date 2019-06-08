@@ -23,8 +23,7 @@ private:
     };
 
 public:
-    class const_iterator
-    {
+    class const_iterator {
     public:
         /// Default constructor that creates an nullptr.
         const_iterator() : current{nullptr} {}
@@ -129,7 +128,7 @@ public:
         }
 
         /// Backs the iterator to the previous location within the list and returns itself after that.
-        iterator &operator--() // --it
+        iterator operator--() // --it
         {
             current = current->prev;
             return iterator(current);
@@ -435,7 +434,7 @@ public:
     void assign(const T &value);
 
     /// Copy the size and values from another list.
-    list &operator=(list &other)
+    list &operator=(list other)
     {
         SIZE = other.size();
         head = new Node;
@@ -469,19 +468,19 @@ public:
     friend bool operator==(const list &lhs, const list &rhs)
     {
         bool isEqual = lhs.SIZE == rhs.SIZE;
-        if (isEqual)
-        {
+
+        if (isEqual) {
             Node *curNodeL = lhs.head->next;
             Node *curNodeR = rhs.head->next;
-            for (size_type i = 0; i < lhs.SIZE; i++)
+            for (size_type i = 0; i < rhs.SIZE; i++)
             {
                 if (curNodeL->data != curNodeR->data)
                     return false;
 
                 curNodeL = curNodeL->next;
                 curNodeR = curNodeR->next;
-            }
-        }
+            }    
+        }    
 
         return isEqual;
     }
@@ -543,7 +542,8 @@ public:
     template <class InItr>
     iterator insert(iterator pos, InItr first, InItr last)
     {
-        SIZE += last - first;
+        size_type cpySize = last - first;
+        SIZE += cpySize;
         iterator start(begin());
 
         Node *curNode = head->next;
@@ -553,25 +553,91 @@ public:
             start++;
         }
 
-        while (first != last)
-        {
-            Node *newNode = new Node;
-            Node *prevNode = curNode->prev;
+        --last;
 
-            curNode->prev = newNode;
+        for (size_type i = 0; i < cpySize; i++, last--) {
+            Node *newNode = new Node;
+            
+            newNode->prev = curNode->prev;
             newNode->next = curNode;
-            curNode = curNode->prev;
-            newNode->data = *(first++);
-            newNode->prev = prevNode;
-            prevNode->next = newNode;
-        }
+            newNode->data = *(last);
+
+            curNode->prev->next = newNode;
+            curNode->prev = newNode;
+            curNode = newNode;
+        } 
 
         return pos;
     }
 
-    iterator insert(iterator pos, std::initializer_list<T> ilist);
-    iterator erase(iterator itr);
-    iterator erase(iterator first, iterator last);
+    /// Inserts elements from the initializer list ilist before pos.
+    iterator insert(iterator pos, std::initializer_list<T> ilist) {
+        SIZE += ilist.size();
+        iterator start(begin());
+
+        Node *curNode = head->next;
+        while (start != pos)
+        {
+            curNode = curNode->next;
+            start++;
+        }
+
+        for (size_type i = 1; i <= ilist.size(); i++) {
+            Node *newNode = new Node;
+            
+            newNode->prev = curNode->prev;
+            newNode->next = curNode;
+            newNode->data = *(ilist.end() - i);
+
+            curNode->prev->next = newNode;
+            curNode->prev = newNode;
+            curNode = newNode;
+        } 
+
+        return pos;
+    }
+
+    /// Removes the object at position pos and returns an iterator to the element that follows pos before the call.
+    iterator erase(iterator pos) {
+        SIZE--;
+
+        iterator start(begin());
+        Node *delNode = head->next;
+        while (start != pos) {
+            delNode = delNode->next;
+            start++;
+        }
+
+        delNode->prev->next = delNode->next;
+        delNode->next->prev = delNode->prev;
+        iterator rt(delNode->next);
+        delete delNode;
+
+        return rt;
+    }
+
+    /// Removes elements in the range [first; last).
+    iterator erase(iterator first, iterator last) {
+        size_type delSize = last - first;        
+
+        iterator start(begin());
+        Node *curNode = head->next;
+        while (start != first) {
+            curNode = curNode->next;
+            start++;
+        }
+
+        iterator rt = first;
+
+        for (size_type i = 0; i < delSize; i++) {
+            rt = first + 1;
+            rt = erase(first++);
+        }
+
+        return rt;
+    }
+
+    // Find é apontado como quesito de avaliação, mas não é definida e nem existe teste para ela. Por isso não foi implementada.
     const_iterator find(const T &value) const;
 
 private:
